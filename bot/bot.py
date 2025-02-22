@@ -14,6 +14,7 @@ load_dotenv()
 # Файл для хранения данных о кредитах
 CREDITS_FILE = "credits.json"
 
+
 # Загрузка данных о кредитах
 def load_credits():
     if os.path.exists(CREDITS_FILE):
@@ -21,14 +22,17 @@ def load_credits():
             return json.load(file)
     return {}
 
+
 # Сохранение данных о кредитах
 def save_credits(credits):
     with open(CREDITS_FILE, "w") as file:
         json.dump(credits, file)
 
+
 # Команда /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я бот для напоминаний о кредитах. Используй /addcredit чтобы добавить кредит.")
+
 
 # Команда /addcredit
 async def add_credit(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -55,6 +59,7 @@ async def add_credit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except (IndexError, ValueError):
         await update.message.reply_text("Используй: /addcredit <название> <сумма> <дата>")
 
+
 # Команда /listcredits
 async def list_credits(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Получаем chat_id пользователя
@@ -72,6 +77,7 @@ async def list_credits(update: Update, context: ContextTypes.DEFAULT_TYPE):
             message += f"{name}: {details['amount']} руб., до {details['due_date']}\n"
         await update.message.reply_text(message)
 
+
 # Команда /removecredit
 async def remove_credit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
@@ -88,6 +94,7 @@ async def remove_credit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except IndexError:
         await update.message.reply_text("Используй: /removecredit <название>")
 
+
 # Напоминание о кредитах
 async def check_credits(context: ContextTypes.DEFAULT_TYPE):
     credits = load_credits()
@@ -102,6 +109,7 @@ async def check_credits(context: ContextTypes.DEFAULT_TYPE):
                     chat_id=chat_id,
                     text=f"⏰ Напоминание: кредит '{name}' на {details['amount']} руб. должен быть погашен до {details['due_date']}."
                 )
+
 
 # Основная функция
 async def main():
@@ -129,7 +137,7 @@ async def main():
 if __name__ == "__main__":
     import asyncio
 
-    # Проверка, запущен ли уже событийный цикл
+
     try:
         asyncio.run(main())
     except RuntimeError as e:
